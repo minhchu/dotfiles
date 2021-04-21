@@ -1,104 +1,92 @@
-" Let Vim and NeoVim shares the same plugin directory.
-" Comment it out if you don't like
+" Comment the following line if you don't want Vim and NeoVim to share the
+" same plugin download directory.
 let g:spacevim_plug_home = '~/.vim/plugged'
 
-" The default leader key is space key.
-" Uncomment the line below and modify "<\Space>" if you prefer another
+" Uncomment the following line to override the leader key. The default value is space key "<\Space>".
 " let g:spacevim_leader = "<\Space>"
 
-" The default local leader key is comma.
-" Uncomment the line below and modify ',' if you prefer another
+" Uncomment the following line to override the local leader key. The default value is comma ','.
 " let g:spacevim_localleader = ','
 
-" Enable the existing layers in space-vim
+" Enable the existing layers in space-vim.
+" Refer to https://github.com/liuchengxu/space-vim/blob/master/layers/LAYERS.md for all available layers.
 let g:spacevim_layers = [
-      \ 'fzf', 'unite', 'better-defaults',
-      \ 'which-key',
-      \ ]
+      \ 'fzf', 'better-defaults', 'which-key', 'tmux', 'git',
+      \ 'lightline', 'file-manager', ]
+
+" Uncomment the following line if your terminal(-emulator) supports true colors.
+let g:spacevim_enable_true_color = 1
+
+" Uncomment the following if you have some nerd font installed.
+" let g:spacevim_nerd_fonts = 1
 
 " If you want to have more control over the layer, try using Layer command.
 " if g:spacevim.gui
 "   Layer 'airline'
 " endif
 
-function! Layers()
-  Layer 'text-align'
-  Layer 'git'
-  Layer 'airline'
-  Layer 'ctrlp'
-  Layer 'file-manager'
-  Layer 'ycmd'
-  Layer 'javascript'
-  Layer 'vue'
-  Layer 'go'
-  Layer 'editing'
-  Layer 'better-motion'
-  Layer 'tmux'
-endfunction
-
-" if g:spacevim.tmux
-  " Layer 'tmux'
-" endif
-
-" Manage your own plugins, refer to vim-plug's instruction for more detials.
+" Manage your own plugins.
+" Refer to https://github.com/junegunn/vim-plug for more detials.
 function! UserInit()
 
-  " Add plugin via Plug command.
-  Plug 'eugen0329/vim-esearch'
-  Plug 'mattn/emmet-vim'
-  Plug 'kaicataldo/material.vim'
-  Plug 'svermeulen/vim-easyclip'
+  " Add your own plugin via Plug command.
+  Plug 'junegunn/seoul256.vim'
+  Plug 'drewtempelmeyer/palenight.vim'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 endfunction
 
-" Override the default settings as well as adding extras
+" Override the default settings from space-vim as well as adding extras
 function! UserConfig()
-  " If you have installed the powerline fonts and want to enable airline layer
-  let g:airline_powerline_fonts=1
 
-  " Material Theme
-  " Theme style: default, dark, palenight
-  let g:material_theme_style = 'default'
-  let g:airline_theme = 'material'
+  " Override the default settings.
+  " Uncomment the following line to disable relative number.
+  " set norelativenumber
+
+  " Adding extras.
+  " Uncomment the following line If you have installed the powerline fonts.
+  " It is good for airline layer.
+  " let g:airline_powerline_fonts = 1
   set background=dark
-  colorscheme material
+  colorscheme palenight
 
-  " Enable italic comment
-  hi Comment cterm=italic
+  " Use FZF instead of CtrlP
+  nmap <C-P> :FZF<CR>
 
-  " CtrlP settings
-  let g:ctrlp_regexp = 0
-  let g:ctrlp_by_filename = 0
-  let g:ctrlp_match_window_bottom = 1
+  " Use tab for trigger completion with characters ahead and navigate.
+  " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+  " other plugin before putting this into your config.
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-  " Indent for Javascript
-  autocmd FileType javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2
-  autocmd FileType vue setlocal tabstop=2 softtabstop=2 shiftwidth=2
-
-  " Emmet
-  let g:user_emmet_install_global = 0
-  autocmd FileType html,css,vue EmmetInstall
-
-  " Remap esearch hotkey
-  call esearch#map('<leader>vv', 'esearch')
-
-  " Use Ctrl+C to copy in visual mode. And Ctrl+V to paste
-  vnoremap <C-c> "+y
-  inoremap <C-v> <ESC>"+pa
-
-  " Use gui colors in terminal if available
-  function! s:enable_termgui()
-    if has('termguicolors')
-      set termguicolors
-      if g:spacevim.tmux
-        " If use vim inside tmux, see https://github.com/vim/vim/issues/993
-        " set Vim-specific sequences for RGB colors
-        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-      endif
-    endif
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
   endfunction
 
-  " If your terminal(-emulator) supports true colors, uncomment the line below
-  call s:enable_termgui()
+  " Use <c-space> to trigger completion.
+  if has('nvim')
+    inoremap <silent><expr> <c-space> coc#refresh()
+  else
+    inoremap <silent><expr> <c-@> coc#refresh()
+  endif
+
+  " Make <CR> auto-select the first completion item and notify coc.nvim to
+  " format on enter, <cr> could be remapped by other vim plugin
+  inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+  " Use `[g` and `]g` to navigate diagnostics
+  " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+  nmap <silent> [g <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+  " GoTo code navigation.
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
 endfunction
