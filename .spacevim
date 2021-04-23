@@ -25,6 +25,13 @@ let g:spacevim_enable_true_color = 1
 "   Layer 'airline'
 " endif
 
+" Coc.vim extensions
+let g:coc_global_extensions = [
+  \ 'coc-phpls', 
+  \ 'coc-pairs',
+  \ 'coc-tsserver',
+  \ ]
+
 " Manage your own plugins.
 " Refer to https://github.com/junegunn/vim-plug for more detials.
 function! UserInit()
@@ -33,6 +40,8 @@ function! UserInit()
   Plug 'junegunn/seoul256.vim'
   Plug 'drewtempelmeyer/palenight.vim'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'mattn/emmet-vim'
+  Plug 'tpope/vim-surround'
 
 endfunction
 
@@ -49,6 +58,8 @@ function! UserConfig()
   " let g:airline_powerline_fonts = 1
   set background=dark
   colorscheme palenight
+  let g:lightline = { 'colorscheme': 'palenight' }
+  let g:user_emmet_leader_key=','
 
   " Use FZF instead of CtrlP
   nmap <C-P> :FZF<CR>
