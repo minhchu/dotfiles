@@ -11,8 +11,8 @@ let g:spacevim_plug_home = '~/.vim/plugged'
 " Enable the existing layers in space-vim.
 " Refer to https://github.com/liuchengxu/space-vim/blob/master/layers/LAYERS.md for all available layers.
 let g:spacevim_layers = [
-      \ 'fzf', 'better-defaults', 'which-key', 'tmux', 'git',
-      \ 'lightline', 'file-manager', ]
+      \ 'fzf', 'better-defaults', 'which-key', 'file-manager', 'git', 'lightline', 'tmux',
+      \ ]
 
 " Uncomment the following line if your terminal(-emulator) supports true colors.
 let g:spacevim_enable_true_color = 1
@@ -25,7 +25,6 @@ let g:spacevim_enable_true_color = 1
 "   Layer 'airline'
 " endif
 
-" Coc.vim extensions
 let g:coc_global_extensions = [
   \ 'coc-phpls', 
   \ 'coc-pairs',
@@ -51,18 +50,29 @@ function! UserConfig()
   " Override the default settings.
   " Uncomment the following line to disable relative number.
   " set norelativenumber
-
-  " Adding extras.
-  " Uncomment the following line If you have installed the powerline fonts.
-  " It is good for airline layer.
-  " let g:airline_powerline_fonts = 1
   set background=dark
   colorscheme palenight
   let g:lightline = { 'colorscheme': 'palenight' }
   let g:user_emmet_leader_key=','
-
   " Use FZF instead of CtrlP
   nmap <C-P> :FZF<CR>
+
+  " install ripgrep to use this feature
+  function! RipgrepFzf(query, fullscreen)
+    let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+    let initial_command = printf(command_fmt, shellescape(a:query))
+    let reload_command = printf(command_fmt, '{q}')
+    let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+  endfunction
+  command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+  " Use Ctrl+Shift+F to search in files
+  nmap <C-S-F> :RG<CR>
+ 
+  " Adding extras.
+  " Uncomment the following line If you have installed the powerline fonts.
+  " It is good for airline layer.
+  " let g:airline_powerline_fonts = 1
 
   " Use tab for trigger completion with characters ahead and navigate.
   " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -100,4 +110,20 @@ function! UserConfig()
   nmap <silent> gy <Plug>(coc-type-definition)
   nmap <silent> gi <Plug>(coc-implementation)
   nmap <silent> gr <Plug>(coc-references)
+
+  " Use K to show documentation in preview window.
+  nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+  function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+    elseif (coc#rpc#ready())
+      call CocActionAsync('doHover')
+    else
+      execute '!' . &keywordprg . " " . expand('<cword>')
+    endif
+  endfunction
+
+  " Highlight the symbol and its references when holding the cursor.
+  autocmd CursorHold * silent call CocActionAsync('highlight')
 endfunction
