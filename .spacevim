@@ -41,6 +41,9 @@ function! UserInit()
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'mattn/emmet-vim'
   Plug 'tpope/vim-surround'
+  Plug 'bagrat/vim-buffet'
+  Plug 'tpope/vim-repeat'
+  Plug 'svermeulen/vim-easyclip'
 
 endfunction
 
@@ -52,10 +55,39 @@ function! UserConfig()
   " set norelativenumber
   set background=dark
   colorscheme palenight
-  let g:lightline = { 'colorscheme': 'palenight' }
+  let g:lightline = { 'colorscheme': 'palenight', 'enable': { 'tabline': 0 } }
   let g:user_emmet_leader_key=','
   " Use FZF instead of CtrlP
   nmap <C-P> :FZF<CR>
+
+  " vim easyclip
+  nnoremap gm m
+  " vim-buffet
+  let g:buffet_show_index = 1
+  let g:buffet_tab_icon = '>'
+  let g:buffet_left_trunc_icon = "\uf0a8"
+  let g:buffet_right_trunc_icon = "\uf0a9"
+  nmap <leader>1 <Plug>BuffetSwitch(1)
+  nmap <leader>2 <Plug>BuffetSwitch(2)
+  nmap <leader>3 <Plug>BuffetSwitch(3)
+  nmap <leader>4 <Plug>BuffetSwitch(4)
+  nmap <leader>5 <Plug>BuffetSwitch(5)
+  nmap <leader>6 <Plug>BuffetSwitch(6)
+  nmap <leader>7 <Plug>BuffetSwitch(7)
+  nmap <leader>8 <Plug>BuffetSwitch(8)
+  nmap <leader>9 <Plug>BuffetSwitch(9)
+  nmap <leader>0 <Plug>BuffetSwitch(10)
+  noremap <Tab> :bn<CR>
+  noremap <S-Tab> :bp<CR>
+  noremap <Leader><Tab> :Bw<CR>
+  noremap <Leader><S-Tab> :Bw!<CR>
+  noremap <C-t> :tabnew split<CR>
+  " Note: Make sure the function is defined before `vim-buffet` is loaded.
+  function! g:BuffetSetCustomColors()
+    hi! BuffetCurrentBuffer cterm=NONE ctermbg=170 ctermfg=8 guibg=#82b1ff guifg=#000000
+    hi! BuffetTab cterm=NONE ctermbg=235 ctermfg=8 guibg=#292D3E guifg=#bfc7d5
+    hi! BuffetBuffer cterm=NONE ctermbg=170 ctermfg=8 guibg=#292D3E guifg=#bfc7d5
+  endfunction
 
   " install ripgrep to use this feature
   function! RipgrepFzf(query, fullscreen)
