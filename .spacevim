@@ -44,6 +44,7 @@ function! UserInit()
   Plug 'bagrat/vim-buffet'
   Plug 'tpope/vim-repeat'
   Plug 'svermeulen/vim-easyclip'
+  Plug 'junegunn/vim-easy-align'
 
 endfunction
 
@@ -60,8 +61,15 @@ function! UserConfig()
   " Use FZF instead of CtrlP
   nmap <C-P> :FZF<CR>
 
+  " Start interactive EasyAlign in visual mode (e.g. vipga)
+  xmap ga <Plug>(EasyAlign)
+
+  " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+  nmap ga <Plug>(EasyAlign)
+
   " vim easyclip
   nnoremap gm m
+
   " vim-buffet
   let g:buffet_show_index = 1
   let g:buffet_tab_icon = '>'
@@ -98,8 +106,8 @@ function! UserConfig()
     call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
   endfunction
   command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-  " Use Ctrl+Shift+F to search in files
-  nmap <C-S-F> :RG<CR>
+  " Use Ctrl+F to search in files
+  nmap <C-F> :RG<CR>
  
   " Adding extras.
   " Uncomment the following line If you have installed the powerline fonts.
