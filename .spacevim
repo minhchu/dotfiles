@@ -29,6 +29,7 @@ let g:coc_global_extensions = [
   \ 'coc-phpls', 
   \ 'coc-pairs',
   \ 'coc-tsserver',
+  \ 'coc-vetur',
   \ ]
 
 " Manage your own plugins.
@@ -47,6 +48,7 @@ function! UserInit()
   Plug 'junegunn/vim-easy-align'
   Plug '907th/vim-auto-save'
   Plug 'sheerun/vim-polyglot'
+  Plug 'easymotion/vim-easymotion'
 
 endfunction
 
@@ -59,7 +61,25 @@ function! UserConfig()
   set background=dark
   colorscheme palenight
   let g:lightline = { 'colorscheme': 'palenight', 'enable': { 'tabline': 0 } }
+  " Swap lines
+  nmap <C-Down> <S-V>mp
+  nmap <C-Up> <S-V>mkP
+  imap <C-Down> <Esc><S-V>mpi
+  imap <C-Up> <Esc><S-V>mkPi
+  
+  " Emmet
   let g:user_emmet_leader_key=','
+  let g:user_emmet_install_global = 0
+  autocmd FileType html,css,blade EmmetInstall
+
+  " Easymotion
+  let g:EasyMotion_do_mapping = 0 " Disable default mappings
+  nmap f <Plug>(easymotion-overwin-f)
+  let g:EasyMotion_smartcase = 1
+  let g:EasyMotion_startofline = 0
+  map <Leader>j <Plug>(easymotion-j)
+  map <Leader>k <Plug>(easymotion-k)
+  
   " Use FZF instead of CtrlP
   nmap <C-P> :FZF<CR>
 
@@ -78,7 +98,7 @@ function! UserConfig()
   " vim-buffet
   let g:buffet_show_index = 1
   let g:buffet_powerline_separators = 1
-  let g:buffet_tab_icon = '>'
+  let g:buffet_tab_icon = "\uf00a"
   let g:buffet_left_trunc_icon = "\uf0a8"
   let g:buffet_right_trunc_icon = "\uf0a9"
   nmap <leader>1 <Plug>BuffetSwitch(1)
