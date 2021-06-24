@@ -26,7 +26,7 @@ let g:spacevim_enable_true_color = 1
 " endif
 
 let g:coc_global_extensions = [
-  \ 'coc-phpls', 
+  \ 'coc-phpls',
   \ 'coc-pairs',
   \ 'coc-tsserver',
   \ 'coc-vetur',
@@ -66,7 +66,7 @@ function! UserConfig()
   nmap <C-Up> <S-V>mkP
   imap <C-Down> <Esc><S-V>mpi
   imap <C-Up> <Esc><S-V>mkPi
-  
+
   " Emmet
   let g:user_emmet_leader_key=','
   let g:user_emmet_install_global = 0
@@ -79,7 +79,7 @@ function! UserConfig()
   let g:EasyMotion_startofline = 0
   map <Leader>j <Plug>(easymotion-j)
   map <Leader>k <Plug>(easymotion-k)
-  
+
   " Use FZF instead of CtrlP
   nmap <C-P> :FZF<CR>
 
