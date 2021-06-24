@@ -1,5 +1,5 @@
 # Install ubuntu package
-sudo apt install curl git zsh htop xclip ripgrep tmux gnome-tweaks
+sudo apt install curl git zsh htop xclip ripgrep tmux gnome-tweaks make
 
 # Install nvim
 curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
@@ -52,6 +52,12 @@ git clone https://github.com/Mayccoll/Gogh.git gogh
 cd gogh/themes
 export TERMINAL=gnome-terminal
 ./palenight.sh
+
+# Install pop-os shell
+npm install -g typescript
+git clone https://github.com/pop-os/shell.git ~/codes/pop-os-shell
+cd ~/codes/pop-os-shell
+make local-install
 
 # Install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
