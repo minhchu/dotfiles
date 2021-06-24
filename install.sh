@@ -1,5 +1,5 @@
 # Install ubuntu package
-sudo apt install curl git zsh htop xclip ripgrep tmux
+sudo apt install curl git zsh htop xclip ripgrep tmux gnome-tweaks
 
 # Install nvim
 curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
