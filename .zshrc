@@ -101,12 +101,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# golang
-export PATH=$PATH:/home/minhchu/.linuxbrew/bin
-export PATH=$PATH:/usr/local/go/bin
-export GOPATH=$HOME/go
-export PATH=$PATH:$(go env GOPATH)/bin
-
 # tmux
 [ -n "$TMUX"  ] && export TERM=xterm-256color
 
