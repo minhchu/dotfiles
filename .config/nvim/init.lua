@@ -49,6 +49,7 @@ vim.call('plug#begin', pluginHome)
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'dominikduda/vim_current_word'
+  Plug 'unblevable/quick-scope'
 
 vim.call('plug#end')
 g.yoinkIncludeDeleteOperations=1
@@ -79,6 +80,8 @@ map('n', '<C-p>', ':Telescope find_files<CR>')
 map('', '<F4>', ':NvimTreeToggle<CR>')
 map('n', '<leader>gs', ':Git<CR>')
 map('n', '<leader>gb', ':Git blame<CR>')
+map('n', '<leader>gd', ':Git diff<CR>')
+map('n', '<leader>gp', ':Git -c push.default=current push<CR>')
 map('n', '<Esc>', ':noh <CR>')
 
 -- Don't copy the replaced text after pasting in visual mode
@@ -103,7 +106,7 @@ M.mappings = {
     top_of_line = "<C-a>",
   },
 }
-inav = M.mappings.insert_nav
+local inav = M.mappings.insert_nav
 map("i", inav.backward, "<Left>")
 map("i", inav.end_of_line, "<End>")
 map("i", inav.forward, "<Right>")
@@ -116,14 +119,55 @@ g.auto_save = true
 g.dashboard_default_executive = 'telescope'
 g.nvim_tree_ignore = { '.git', 'node_modules' }
 g.nvim_tree_window_picker_exclude = {
-  filetype = { 'notify', 'packer', 'fugitive', 'vim-plug', 'no ft' },
+  filetype = {
+    'notify',
+    'packer',
+    'fugitive',
+    'fugitiveblame',
+    'vim-plug',
+    'git',
+    '' -- no filetype, ex: __coc_search__0 buffer has no ft
+  },
   buftype = { 'terminal' }
 }
+g.dashboard_custom_header = {
+      '     ⠀⠀⠀⠀⠀⠀⠀⡴⠞⠉⢉⣭⣿⣿⠿⣳⣤⠴⠖⠛⣛⣿⣿⡷⠖⣶⣤⡀⠀⠀⠀  ',
+      '   ⠀⠀⠀⠀⠀⠀⠀⣼⠁⢀⣶⢻⡟⠿⠋⣴⠿⢻⣧⡴⠟⠋⠿⠛⠠⠾⢛⣵⣿⠀⠀⠀⠀  ',
+      '   ⣼⣿⡿⢶⣄⠀⢀⡇⢀⡿⠁⠈⠀⠀⣀⣉⣀⠘⣿⠀⠀⣀⣀⠀⠀⠀⠛⡹⠋⠀⠀⠀⠀  ',
+      '   ⣭⣤⡈⢑⣼⣻⣿⣧⡌⠁⠀⢀⣴⠟⠋⠉⠉⠛⣿⣴⠟⠋⠙⠻⣦⡰⣞⠁⢀⣤⣦⣤⠀  ',
+      '   ⠀⠀⣰⢫⣾⠋⣽⠟⠑⠛⢠⡟⠁⠀⠀⠀⠀⠀⠈⢻⡄⠀⠀⠀⠘⣷⡈⠻⣍⠤⢤⣌⣀  ',
+      '   ⢀⡞⣡⡌⠁⠀⠀⠀⠀⢀⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⢿⡀⠀⠀⠀⠸⣇⠀⢾⣷⢤⣬⣉  ',
+      '   ⡞⣼⣿⣤⣄⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⣿⠀⠸⣿⣇⠈⠻  ',
+      '   ⢰⣿⡿⢹⠃⠀⣠⠤⠶⣼⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⣿⠀⠀⣿⠛⡄⠀  ',
+      '   ⠈⠉⠁⠀⠀⠀⡟⡀⠀⠈⡗⠲⠶⠦⢤⣤⣤⣄⣀⣀⣸⣧⣤⣤⠤⠤⣿⣀⡀⠉⣼⡇⠀  ',
+      '   ⣿⣴⣴⡆⠀⠀⠻⣄⠀⠀⠡⠀⠀⠀⠈⠛⠋⠀⠀⠀⡈⠀⠻⠟⠀⢀⠋⠉⠙⢷⡿⡇⠀  ',
+      '   ⣻⡿⠏⠁⠀⠀⢠⡟⠀⠀⠀⠣⡀⠀⠀⠀⠀⠀⢀⣄⠀⠀⠀⠀⢀⠈⠀⢀⣀⡾⣴⠃⠀  ',
+      '   ⢿⠛⠀⠀⠀⠀⢸⠁⠀⠀⠀⠀⠈⠢⠄⣀⠠⠼⣁⠀⡱⠤⠤⠐⠁⠀⠀⣸⠋⢻⡟⠀⠀  ',
+      '   ⠈⢧⣀⣤⣶⡄⠘⣆⠀⠀⠀⠀⠀⠀⠀⢀⣤⠖⠛⠻⣄⠀⠀⠀⢀⣠⡾⠋⢀⡞⠀⠀⠀  ',
+      '   ⠀⠀⠻⣿⣿⡇⠀⠈⠓⢦⣤⣤⣤⡤⠞⠉⠀⠀⠀⠀⠈⠛⠒⠚⢩⡅⣠⡴⠋⠀⠀⠀⠀  ',
+      '   ⠀⠀⠀⠈⠻⢧⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⣻⠿⠋⠀⠀⠀⠀⠀⠀  ',
+      '   ⠀⠀⠀⠀⠀⠀⠉⠓⠶⣤⣄⣀⡀⠀⠀⠀⠀⠀⢀⣀⣠⡴⠖⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀  '
+}
 
+g.dashboard_custom_section = {
+   a = { description = { "  Recents                   SPC f o" }, command = "Telescope oldfiles" },
+   b = { description = { "  Find File                 SPC f f" }, command = "Telescope find_files" },
+   c = { description = { "  Find Word                 SPC f w" }, command = "Telescope live_grep" },
+   d = { description = { "洛 New File                  SPC f n" }, command = "DashboardNewFile" },
+   e = { description = { "  Bookmarks                 SPC b m" }, command = "Telescope marks" },
+   f = { description = { "  Load Last Session         SPC l  " }, command = "SessionLoad" },
+}
+
+--[[
+NvimTree
+--]]
 require'nvim-tree'.setup{
   auto_close = true,
 }
 
+--[[
+Telescope
+--]]
 local actions = require('telescope.actions')
 require('telescope').setup{
   defaults = {
@@ -137,6 +181,9 @@ require('telescope').setup{
   }
 }
 
+--[[
+ToggleTerm
+--]]
 require('toggleterm').setup{
   -- size can be a number or function which is passed the current terminal
   size = 10,
@@ -176,4 +223,5 @@ map("n", "<leader>ht", "<cmd>lua htopToggle()<CR>", {noremap = true, silent = tr
 
 vim.cmd('colorscheme palenight')
 vim.cmd 'source ~/.config/nvim/config.vim'
+
 
