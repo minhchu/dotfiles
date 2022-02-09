@@ -6,6 +6,7 @@ let g:coc_global_extensions = [
   \ 'coc-tsserver',
   \ 'coc-vetur',
   \ 'coc-snippets',
+  \ 'coc-prettier',
   \ ]
 
 function! s:ask(message) abort

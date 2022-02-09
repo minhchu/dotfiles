@@ -1,3 +1,11 @@
+vim.cmd[[
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+]]
+
 local opt = vim.opt
 local g = vim.g
 
@@ -117,7 +125,6 @@ map("i", inav.top_of_line, "<ESC>^i")
 g.lightline = { colorscheme = 'palenight', enable = { tabline = false } }
 g.auto_save = true
 g.dashboard_default_executive = 'telescope'
-g.nvim_tree_ignore = { '.git', 'node_modules' }
 g.nvim_tree_window_picker_exclude = {
   filetype = {
     'notify',
@@ -163,6 +170,12 @@ NvimTree
 --]]
 require'nvim-tree'.setup{
   auto_close = true,
+  filters = {
+    custom = {
+      '.git',
+      'node_modules'
+    }
+  }
 }
 
 --[[

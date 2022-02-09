@@ -1,5 +1,5 @@
 # Install ubuntu package
-sudo apt install curl git zsh htop xclip ripgrep tmux gnome-tweaks make
+sudo apt install -y curl git zsh htop xclip ripgrep tmux gnome-tweaks make python3-pip
 
 # Install nvim
 curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
@@ -48,6 +48,12 @@ curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo 
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 sudo apt update
 sudo apt install gh
+
+# Install heroku cli
+curl https://cli-assets.heroku.com/install.sh | sh
+
+# Install provider for neovim
+python3 -m pip install --user --upgrade pynvim
 
 # Install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
