@@ -58,7 +58,8 @@ python3 -m pip install --user --upgrade pynvim
 # Install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
+# TODO: install Alacritty
 # Copy config manually
-cp .tmux.conf ~/.tmux.conf
-cp .zshrc ~/.zshrc
-cp .gitconfig ~/.gitconfig
+# cp .tmux.conf ~/.tmux.conf
+# cp .zshrc ~/.zshrc
+# cp .gitconfig ~/.gitconfig

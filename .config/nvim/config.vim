@@ -7,6 +7,7 @@ let g:coc_global_extensions = [
   \ 'coc-vetur',
   \ 'coc-snippets',
   \ 'coc-prettier',
+  \ 'coc-json',
   \ ]
 
 function! s:ask(message) abort
