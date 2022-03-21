@@ -1,3 +1,5 @@
 [user]
 	email = scsilver94@gmail.com
 	name = Minh Chu
+[core]
+	editor = nvim
