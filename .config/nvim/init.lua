@@ -27,6 +27,8 @@ opt.updatetime = 300
 opt.hidden = true
 -- use same clipboard register for vim and OS
 opt.clipboard = 'unnamedplus'
+opt.ignorecase = true
+opt.smartcase = true
 
 local Plug = vim.fn['plug#']
 
@@ -46,7 +48,8 @@ vim.call('plug#begin', pluginHome)
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-fugitive'
-  Plug 'mhinz/vim-signify'
+--  Plug 'mhinz/vim-signify'
+  Plug 'airblade/vim-gitgutter'
   Plug 'bagrat/vim-buffet'
   Plug 'junegunn/vim-easy-align'
   Plug '907th/vim-auto-save'
@@ -72,8 +75,10 @@ local map = function (mode, key, map, options)
   vim_map(mode, key, map, options)
 end
 
-map('n', 'H', '0')
+map('n', 'H', '^')
 map('n', 'L', '$')
+map('v', 'H', '^')
+map('v', 'L', '$')
 -- redo
 map('n', 'U', '<C-r>')
 -- map('n', 'U', '<cmd>redo<cr>')
@@ -102,6 +107,8 @@ map('n', 'd', '"_d')
 map('v', 'd', '"_d')
 map('n', 'c', '"_c')
 map('v', 'c', '"_c')
+map('n', 'C', '"_C')
+map('v', 'C', '"_C')
 
 local M = {}
 M.mappings = {
@@ -170,8 +177,8 @@ NvimTree
 --]]
 require'nvim-tree'.setup{
   auto_close = true,
-  filters = {
-    custom = {
+  filters = { 
+    custom = { 
       '.git',
       'node_modules'
     }
@@ -214,8 +221,8 @@ map('t', '<C-\\>', '<cmd>ToggleTerm<CR>')
 
 function _G.set_terminal_keymaps()
   local opts = {noremap = true}
-  vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
-  -- vim.api.nvim_buf_set_keymap(0, 't', 'jj', [[<C-\><C-n>]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<c-\><c-n>]], opts)
+  -- vim.api.nvim_buf_set_keymap(0, 't', 'jj', [[<c-\><c-n>]], opts)
   vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
   vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
   vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
