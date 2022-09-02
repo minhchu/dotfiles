@@ -106,3 +106,6 @@ export PATH="$PATH:$HOME/.yarn/bin"
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Starship shell
+eval "$(starship init zsh)"

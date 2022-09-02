@@ -61,6 +61,8 @@ vim.call('plug#begin', pluginHome)
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'dominikduda/vim_current_word'
   Plug 'unblevable/quick-scope'
+  Plug 'folke/zen-mode.nvim'
+  Plug('folke/tokyonight.nvim', {branch = 'main' })
 
 vim.call('plug#end')
 g.yoinkIncludeDeleteOperations=1
@@ -89,8 +91,9 @@ map('i', 'jj', '<Esc>')
 map('n', '<leader>fd', ':NvimTreeFindFile<CR>')
 map('n', '<leader>ff', ':Telescope find_files<CR>')
 map('n', '<leader>fw', ':Telescope live_grep<CR>')
+map('n', '<leader>pw', ':lua require(\'telescope.builtin\').grep_string { search = vim.fn.expand("<cword>") }<CR>')
 map('n', '<C-p>', ':Telescope find_files<CR>')
-map('', '<F4>', ':NvimTreeToggle<CR>')
+map('n', 'fb', ':NvimTreeToggle<CR>')
 map('n', '<leader>gs', ':Git<CR>')
 map('n', '<leader>gb', ':Git blame<CR>')
 map('n', '<leader>gd', ':Git diff<CR>')
@@ -109,6 +112,9 @@ map('n', 'c', '"_c')
 map('v', 'c', '"_c')
 map('n', 'C', '"_C')
 map('v', 'C', '"_C')
+-- keep in visual mode after indenting
+map('v', '<', '<gv')
+map('v', '>', '>gv')
 
 local M = {}
 M.mappings = {
@@ -129,7 +135,7 @@ map("i", inav.next_line, "<Up>")
 map("i", inav.prev_line, "<Down>")
 map("i", inav.top_of_line, "<ESC>^i")
 
-g.lightline = { colorscheme = 'palenight', enable = { tabline = false } }
+g.lightline = { colorscheme = 'tokyonight', enable = { tabline = false } }
 g.auto_save = true
 g.dashboard_default_executive = 'telescope'
 g.nvim_tree_window_picker_exclude = {
@@ -200,7 +206,9 @@ require('telescope').setup{
     },
   }
 }
-
+require("zen-mode").setup {
+  plugins = { tmux = { enabled = true }}
+}
 --[[
 ToggleTerm
 --]]
@@ -241,7 +249,5 @@ end
 
 map("n", "<leader>ht", "<cmd>lua htopToggle()<CR>", {noremap = true, silent = true})
 
-vim.cmd('colorscheme palenight')
+vim.cmd('colorscheme tokyonight')
 vim.cmd 'source ~/.config/nvim/config.vim'
-
-
