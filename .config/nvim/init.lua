@@ -38,10 +38,11 @@ local pluginHome = '~/.config/nvim/plugged';
 vim.call('plug#begin', pluginHome)
 
   Plug 'nvim-lua/plenary.nvim'
-  Plug 'glepnir/dashboard-nvim'
+  Plug 'nvimdev/dashboard-nvim'
   Plug 'nvim-telescope/telescope.nvim'
   Plug 'drewtempelmeyer/palenight.vim'
   Plug('neoclide/coc.nvim', {branch = 'release'})
+  Plug('mg979/vim-visual-multi', {branch = 'master'})
   Plug 'akinsho/toggleterm.nvim'
 
   Plug 'mattn/emmet-vim'
@@ -59,7 +60,7 @@ vim.call('plug#begin', pluginHome)
   Plug 'kyazdani42/nvim-tree.lua'
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'christoomey/vim-tmux-navigator'
-  Plug 'dominikduda/vim_current_word'
+
   Plug 'unblevable/quick-scope'
   Plug 'folke/zen-mode.nvim'
   Plug('folke/tokyonight.nvim', {branch = 'main' })
@@ -181,15 +182,11 @@ g.dashboard_custom_section = {
 --[[
 NvimTree
 --]]
-require'nvim-tree'.setup{
-  auto_close = true,
-  filters = { 
-    custom = { 
-      '.git',
-      'node_modules'
-    }
-  }
-}
+require'nvim-tree'.setup{}
+
+vim.api.nvim_create_autocmd({"QuitPre"}, {
+    callback = function() vim.cmd("NvimTreeClose") end,
+})
 
 --[[
 Telescope
@@ -251,3 +248,4 @@ map("n", "<leader>ht", "<cmd>lua htopToggle()<CR>", {noremap = true, silent = tr
 
 vim.cmd('colorscheme tokyonight')
 vim.cmd 'source ~/.config/nvim/config.vim'
+

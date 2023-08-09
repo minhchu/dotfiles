@@ -1,7 +1,6 @@
 {
-  "coc.preferences.formatOnSaveFiletypes": [
-    "php",
-    "typescriptreact",
-    "typescript"
-  ]
+  "[typescript][typescriptreact][php]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "snippets.ultisnips.pythonPrompt": false
 }

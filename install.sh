@@ -13,10 +13,6 @@ sudo usermod -aG docker ${USER}
 rm get-docker.sh
 # logout your computer then login again
 
-# Install docker-compose
-sudo curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-
 # Install nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
 
@@ -57,6 +53,15 @@ python3 -m pip install --user --upgrade pynvim
 
 # Install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# Install starship prompt
+curl -sS https://starship.rs/install.sh | sh
+
+# Install go
+# Install rust
+
+# Install fxcit-bamboo
+git clone git@github.com:fcitx/fcitx5-bamboo.git
 
 # TODO: install Alacritty
 # Copy config manually
