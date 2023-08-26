@@ -182,10 +182,25 @@ g.dashboard_custom_section = {
 --[[
 NvimTree
 --]]
-require'nvim-tree'.setup{}
+require('nvim-tree').setup({})
 
-vim.api.nvim_create_autocmd({"QuitPre"}, {
-    callback = function() vim.cmd("NvimTreeClose") end,
+require('dashboard').setup({})
+
+vim.api.nvim_create_autocmd("QuitPre", {
+  callback = function()
+    local invalid_win = {}
+    local wins = vim.api.nvim_list_wins()
+    for _, w in ipairs(wins) do
+      local bufname = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(w))
+      if bufname:match("NvimTree_") ~= nil then
+        table.insert(invalid_win, w)
+      end
+    end
+    if #invalid_win == #wins - 1 then
+      -- Should quit, so we close all invalid windows.
+      for _, w in ipairs(invalid_win) do vim.api.nvim_win_close(w, true) end
+    end
+  end
 })
 
 --[[
@@ -248,4 +263,5 @@ map("n", "<leader>ht", "<cmd>lua htopToggle()<CR>", {noremap = true, silent = tr
 
 vim.cmd('colorscheme tokyonight')
 vim.cmd 'source ~/.config/nvim/config.vim'
+
 

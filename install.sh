@@ -45,8 +45,9 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githu
 sudo apt update
 sudo apt install gh
 
-# Install heroku cli
-curl https://cli-assets.heroku.com/install.sh | sh
+# Install fzf
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
 
 # Install provider for neovim
 python3 -m pip install --user --upgrade pynvim
@@ -57,11 +58,13 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 # Install starship prompt
 curl -sS https://starship.rs/install.sh | sh
 
-# Install go
 # Install rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
+# Install go
+#
 # Install fxcit-bamboo
-git clone git@github.com:fcitx/fcitx5-bamboo.git
+# git clone git@github.com:fcitx/fcitx5-bamboo.git
 
 # TODO: install Alacritty
 # Copy config manually
