@@ -61,6 +61,7 @@ ZSH_THEME="lambda"
 plugins=(
   git
   fancy-ctrl-z
+  docker
 )
 
 source $ZSH/oh-my-zsh.sh
