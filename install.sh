@@ -61,6 +61,8 @@ curl -sS https://starship.rs/install.sh | sh
 # Install rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
+# Install watchman
+
 # Install go
 #
 # Install fxcit-bamboo

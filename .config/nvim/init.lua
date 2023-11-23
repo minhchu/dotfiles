@@ -21,6 +21,7 @@ opt.termguicolors = true
 opt.splitbelow = true
 opt.splitright = true
 opt.updatetime = 300
+g.nowrap = true
 -- Under default settings, making changes and then opening a new file will display E37: No write since last change (add ! to override)
 -- :set hidden will change this behaviour
 -- With :set hidden, opening a new file when the current buffer has unsaved changes causes files to be hidden instead of closed
@@ -44,8 +45,9 @@ vim.call('plug#begin', pluginHome)
   Plug('neoclide/coc.nvim', {branch = 'release'})
   Plug('mg979/vim-visual-multi', {branch = 'master'})
   Plug 'akinsho/toggleterm.nvim'
+  Plug 'sindrets/diffview.nvim'
 
-  Plug 'mattn/emmet-vim'
+-- Plug 'mattn/emmet-vim'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-fugitive'
@@ -55,13 +57,23 @@ vim.call('plug#begin', pluginHome)
   Plug 'junegunn/vim-easy-align'
   Plug '907th/vim-auto-save'
   Plug 'sheerun/vim-polyglot'
-  Plug 'honza/vim-snippets'
+--  Plug 'honza/vim-snippets'
   Plug 'itchyny/lightline.vim'
   Plug 'kyazdani42/nvim-tree.lua'
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'christoomey/vim-tmux-navigator'
-
   Plug 'unblevable/quick-scope'
+
+-- Fold column
+  Plug 'kevinhwang91/promise-async'
+  Plug 'kevinhwang91/nvim-ufo'
+  Plug 'luukvbaal/statuscol.nvim'
+
+-- UI things:
+--  Plug 'MunifTanjim/nui.nvim'
+--  Plug 'rcarriga/nvim-notify'
+--  Plug 'folke/noice.nvim'
+
   Plug 'folke/zen-mode.nvim'
   Plug('folke/tokyonight.nvim', {branch = 'main' })
 
@@ -100,6 +112,8 @@ map('n', '<leader>gb', ':Git blame<CR>')
 map('n', '<leader>gd', ':Git diff<CR>')
 map('n', '<leader>gp', ':Git -c push.default=current push<CR>')
 map('n', '<Esc>', ':noh <CR>')
+map('n', '<leader>dv', ':DiffviewOpen<CR>')
+map('n', '<leader>dc', ':DiffviewClose<CR>')
 
 -- Don't copy the replaced text after pasting in visual mode
 map('v', 'p', '"_dP')
@@ -179,10 +193,50 @@ g.dashboard_custom_section = {
    f = { description = { "  Load Last Session         SPC l  " }, command = "SessionLoad" },
 }
 
+vim.o.foldcolumn = '1' -- '0' is not bad
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldclose:]]
+
+-- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+-- vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
+-- vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+
+local builtin = require("statuscol.builtin")
+require("statuscol").setup(
+  {
+    relculright = true,
+    segments = {
+      {text = {builtin.lnumfunc, " "}, click = "v:lua.ScLa"},
+      {text = {"%s"}, click = "v:lua.ScSa"},
+      {text = {builtin.foldfunc, " "}, click = "v:lua.ScFa"},
+    }
+  }
+)
+
+require('ufo').setup()
+
+require('diffview').setup({ 
+    hooks = {
+      view_opened = function(view)
+        vim.api.nvim_exec2("CocDisable", { output = false })
+      end,
+      view_closed = function(view)
+        vim.api.nvim_exec2("CocEnable", { output = false })
+      end,
+    }
+})
+
 --[[
 NvimTree
 --]]
-require('nvim-tree').setup({})
+-- require('nvim-tree.view').View.winopts.signcolumn = 'no'
+require('nvim-tree').setup({ 
+  view = { 
+    signcolumn = "no"
+  }
+})
 
 require('dashboard').setup({})
 
@@ -263,5 +317,3 @@ map("n", "<leader>ht", "<cmd>lua htopToggle()<CR>", {noremap = true, silent = tr
 
 vim.cmd('colorscheme tokyonight')
 vim.cmd 'source ~/.config/nvim/config.vim'
-
-
