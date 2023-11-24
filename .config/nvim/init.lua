@@ -211,7 +211,9 @@ require("statuscol").setup(
       {text = {builtin.lnumfunc, " "}, click = "v:lua.ScLa"},
       {text = {"%s"}, click = "v:lua.ScSa"},
       {text = {builtin.foldfunc, " "}, click = "v:lua.ScFa"},
-    }
+    },
+    bt_ignore = {"terminal"},
+    ft_ignore = {"NvimTree"}
   }
 )
 
@@ -231,12 +233,7 @@ require('diffview').setup({
 --[[
 NvimTree
 --]]
--- require('nvim-tree.view').View.winopts.signcolumn = 'no'
-require('nvim-tree').setup({ 
-  view = { 
-    signcolumn = "no"
-  }
-})
+require('nvim-tree').setup({})
 
 require('dashboard').setup({})
 
