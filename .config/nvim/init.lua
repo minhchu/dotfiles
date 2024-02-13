@@ -213,7 +213,7 @@ require("statuscol").setup(
       {text = {builtin.foldfunc, " "}, click = "v:lua.ScFa"},
     },
     bt_ignore = {"terminal"},
-    ft_ignore = {"NvimTree"}
+    ft_ignore = {"NvimTree", "git"}
   }
 )
 
@@ -314,3 +314,4 @@ map("n", "<leader>ht", "<cmd>lua htopToggle()<CR>", {noremap = true, silent = tr
 
 vim.cmd('colorscheme tokyonight')
 vim.cmd 'source ~/.config/nvim/config.vim'
+
