@@ -4,7 +4,7 @@ let g:coc_global_extensions = [
   \ 'coc-phpls', 
   \ 'coc-pairs',
   \ 'coc-tsserver',
-  \ 'coc-vetur',
+  \ 'coc-go',
   \ 'coc-prettier',
   \ 'coc-json',
   \ ]
