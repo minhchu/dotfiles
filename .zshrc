@@ -60,7 +60,6 @@ ZSH_THEME="lambda"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  fancy-ctrl-z
   docker
 )
 

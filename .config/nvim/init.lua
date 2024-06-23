@@ -41,14 +41,12 @@ vim.call('plug#begin', pluginHome)
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvimdev/dashboard-nvim'
   Plug 'nvim-telescope/telescope.nvim'
+  Plug 'nvim-telescope/telescope-live-grep-args.nvim'
   Plug 'drewtempelmeyer/palenight.vim'
   Plug('neoclide/coc.nvim', {branch = 'release'})
   Plug('mg979/vim-visual-multi', {branch = 'master'})
   Plug 'akinsho/toggleterm.nvim'
   Plug 'sindrets/diffview.nvim'
-  Plug('kkoomen/vim-doge', { ['do'] = function()
-    vim.fn['doge#install']()
-  end })
 
 -- Plug 'mattn/emmet-vim'
   Plug 'tpope/vim-surround'
@@ -66,7 +64,6 @@ vim.call('plug#begin', pluginHome)
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'unblevable/quick-scope'
---  Plug 'folke/trouble.nvim' -- good but not needed
 
 -- Fold column
   Plug 'kevinhwang91/promise-async'
@@ -107,10 +104,10 @@ map('n', '<leader>fs', ':w<CR>')
 map('i', 'jj', '<Esc>')
 map('n', '<leader>fd', ':NvimTreeFindFile<CR>')
 map('n', '<leader>ff', ':Telescope find_files<CR>')
-map('n', '<leader>fw', ':Telescope live_grep<CR>')
-map('n', '<leader>pw', ':lua require(\'telescope.builtin\').grep_string { search = vim.fn.expand("<cword>") } <CR>')
+map('n', '<leader>fw', ':lua require(\'telescope\').extensions.live_grep_args.live_grep_args()<CR>')
+map('n', '<leader>pw', ':lua require(\'telescope.builtin\').grep_string { search = vim.fn.expand("<cword>") }<CR>')
 map('n', '<C-p>', ':Telescope find_files<CR>')
-map('n', 'fb', ':NvimTreeToggle<CR>')
+map('n', '<leader>fb', ':NvimTreeToggle<CR>')
 map('n', '<leader>gs', ':Git<CR>')
 map('n', '<leader>gb', ':Git blame<CR>')
 map('n', '<leader>gd', ':Git diff<CR>')
@@ -134,9 +131,6 @@ map('v', 'C', '"_C')
 -- keep in visual mode after indenting
 map('v', '<', '<gv')
 map('v', '>', '>gv')
-
-map('n', '<leader>dg', '<Plug>(doge-generate)')
-g.doge_enable_mappings = 0
 
 local M = {}
 M.mappings = {
@@ -224,6 +218,7 @@ require("statuscol").setup(
   }
 )
 
+
 require('ufo').setup()
 
 require('diffview').setup({ 
@@ -265,17 +260,57 @@ vim.api.nvim_create_autocmd("QuitPre", {
 Telescope
 --]]
 local actions = require('telescope.actions')
-require('telescope').setup{
-  defaults = {
-    mappings = {
-      i = {
-        ["<esc>"] = actions.close,
-        ["<C-j>"] = actions.move_selection_next,
-        ["<C-k>"] = actions.move_selection_previous
+local telescope = require('telescope')
+local lga_actions = require("telescope-live-grep-args.actions")
+telescope.setup({
+    defaults = {
+      mappings = {
+        i = {
+          ["<esc>"] = actions.close,
+          ["<C-j>"] = actions.move_selection_next,
+          ["<C-k>"] = actions.move_selection_previous
+        },
       },
     },
-  }
-}
+    pickers = {
+      live_grep = {
+        file_ignore_patterns = { 'node_modules', '.git', '.venv' },
+        additional_args = function(_)
+          return { "--hidden" }
+        end
+      },
+      find_files = {
+        file_ignore_patterns = { 'node_modules', '.git', '.venv' },
+        hidden = true
+      },
+      grep_string = { 
+        hidden = true
+      }
+    },
+    extensions = {
+      live_grep_args = {
+        auto_quoting = true, -- enable/disable auto-quoting
+        -- define mappings, e.g.
+        mappings = { -- extend mappings
+          i = {
+            ["<C-k>"] = lga_actions.quote_prompt(),
+            ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+            -- freeze the current list and start a fuzzy search in the frozen list
+            ["<C-space>"] = actions.to_fuzzy_refine,
+          },
+        },
+        -- ... also accepts theme settings, for example:
+        -- theme = "dropdown", -- use dropdown theme
+        -- theme = { }, -- use own theme spec
+        -- layout_config = { mirror=true }, -- mirror preview pane
+      }
+    }
+  })
+telescope.load_extension("live_grep_args")
+
+--[[
+Zen mode
+--]]
 require("zen-mode").setup {
   plugins = { tmux = { enabled = true }}
 }

@@ -12,9 +12,12 @@ brew install \
   httpie \
   k6 \
   nvm \
-  python-setuptools
+  python-setuptools \
+  tpm \
+  helm \
+  kubernetes-cli
 
-brew install --casks google-chrome stats alacritty orbstack
+brew install --casks google-chrome stats alacritty orbstack linearmouse raycast
 brew tap homebrew/cask-fonts
 brew install font-sauce-code-pro-nerd-font
 
